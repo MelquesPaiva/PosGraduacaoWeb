@@ -1,0 +1,6 @@
+.idea/
+InfraestruturaParaWeb/terraform/.terraform
+
+*.pem
+*.backup
+*.lock.hcl
