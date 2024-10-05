@@ -23,6 +23,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: "frontend/index.html"
+          source: "InfraestruturaParaWeb/web/index.html"
           target: "/var/www/html/"
           strip_components: 1
