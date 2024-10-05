@@ -1,0 +1,23 @@
+name: Deploy Application
+run-name: ${{ github.actor }} Deploy of the application
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Deploy-App:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Deploy FrontEnd
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          source: "frontend/index.html"
+          target: "/var/www/html/"
+          strip_components: 1
