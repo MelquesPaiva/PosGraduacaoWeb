@@ -24,6 +24,7 @@ resource "aws_instance" "posWeb_myapp" {
   instance_type = "t2.micro"
   key_name = "melques-terraform-key"
   vpc_security_group_ids = [aws_security_group.posweb_myapp_sg.id]
+  user_data = base64encode(data.template_file.user_data.rendered)
   tags = {
     Name = "PosWebMyApp"
   }
