@@ -1,16 +1,21 @@
-name: Deploy Application
-run-name: ${{ github.actor }} Deploy of the application
+name: Deploy MyAPP
+run-name: ${{ github.actor }} is deploying MyAPP 🚀
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  Deploy-App:
+  Deploy-MyAPP:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+
+      - name: Config FrontEnd file
+        run: |
+          sed -i 's/_API_ADDRESS_/${{ secrets.HOST }}/g' frontend/index.html
 
       - name: Deploy FrontEnd
         uses: appleboy/scp-action@v0.1.7
@@ -18,6 +23,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: "web/index.html"
+          source: "frontend/index.html"
           target: "/var/www/html/"
           strip_components: 1
