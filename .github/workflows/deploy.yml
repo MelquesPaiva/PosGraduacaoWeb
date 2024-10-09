@@ -22,3 +22,21 @@ jobs:
           source: "InfraestruturaParaWeb/web/*"
           target: "/var/www/html/"
           strip_components: 2
+
+      - name: Config BackEnd file
+        run: |
+          cp InfraestruturaParaWeb/app/.env.example InfraestruturaParaWeb/app/.env
+          sed -i 's/DB_HOST=/DB_HOST=${{ secrets.DB_HOST }}/' InfraestruturaParaWeb/app/.env
+          sed -i 's/DB_SCHEMA=/DB_SCHEMA=${{ secrets.DB_NAME }}/' InfraestruturaParaWeb/app/.env
+          sed -i 's/DB_USER=/DB_USER=${{ secrets.DB_USERNAME }}/' InfraestruturaParaWeb/app/.env
+          sed -i 's/DB_PASSWORD=/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' InfraestruturaParaWeb/app/.env
+
+      - name: Deploy BackEnd
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          source: "InfraestruturaParaWeb/app/*"
+          target: "/home/ubuntu/myapp/"
+          strip_components: 2

@@ -8,18 +8,13 @@ apt update
 
 apt -y install \
     net-tools \
-    mysql-server \
-    python3-pip \
-    python3-venv \
+    mysql-client \
+    php \
+    php-mysql php-mbstring php-bcmath php-zip php-gd php-curl php-xml \
+    php-fpm \
     pkg-config \
     default-libmysqlclient-dev \
     nginx
 
 mkdir /home/ubuntu/myapp
 cd /home/ubuntu/myapp
-python3 -m venv .
-source ./bin/activate
-pip install \
-    flask \
-    flask-mysqldb \
-    flask-cors
