@@ -30,6 +30,7 @@ jobs:
           sed -i 's/DB_SCHEMA=/DB_SCHEMA=${{ secrets.DB_NAME }}/' InfraestruturaParaWeb/app/.env
           sed -i 's/DB_USER=/DB_USER=${{ secrets.DB_USERNAME }}/' InfraestruturaParaWeb/app/.env
           sed -i 's/DB_PASSWORD=/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' InfraestruturaParaWeb/app/.env
+          cd InfraestruturaParaWeb/app && composer install
 
       - name: Deploy BackEnd
         uses: appleboy/scp-action@v0.1.7
