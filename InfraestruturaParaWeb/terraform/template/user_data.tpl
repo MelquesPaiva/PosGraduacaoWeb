@@ -18,4 +18,4 @@ apt -y install \
 sudo chown -R ubuntu /var/www/html
 
 mkdir /home/ubuntu/myapp
-cd /home/ubuntu/myapp
+sudo chown -R ubuntu:ubuntu /home/ubuntu/myapp
