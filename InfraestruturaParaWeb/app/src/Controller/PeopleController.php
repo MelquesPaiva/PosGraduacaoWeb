@@ -53,8 +53,8 @@ class PeopleController
             $stmt->bindParam('id', $args['id'], \PDO::PARAM_INT);
             $stmt->execute();
         } catch (\Throwable $error) {
-            $statusCode = 500;
-            $data = $this->errorResponse($error);
+            $response->getBody()->write(json_encode($this->errorResponse($error)));
+            return $response->withStatus(500);
         }
 
         return $this->handleResponse($statusCode, $data);
@@ -76,8 +76,8 @@ class PeopleController
                 'id' => $args['id'],
             ]);
         } catch (\Throwable $error) {
-            $statusCode = 500;
-            $data = $this->errorResponse($error);
+            $response->getBody()->write(json_encode($this->errorResponse($error)));
+            return $response->withStatus(500);
         }
 
         return $this->handleResponse($statusCode, $data);
@@ -98,8 +98,8 @@ class PeopleController
                 'cell_phone' => $requestData->cell_phone ?? null,
             ]);
         } catch (\Throwable $error) {
-            $statusCode = 500;
-            $data = $this->errorResponse($error);
+            $response->getBody()->write(json_encode($this->errorResponse($error)));
+            return $response->withStatus(500);
         }
 
         return $this->handleResponse($statusCode, $data);

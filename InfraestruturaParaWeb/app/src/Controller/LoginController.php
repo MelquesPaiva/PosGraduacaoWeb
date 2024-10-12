@@ -25,13 +25,16 @@ class LoginController
             $stmt->execute();
             $result = $stmt->fetchObject();
             if (!$result) {
-                return $this->handleResponse(401, ['message' => 'Login não autorizado']);
+                $response->getBody()->write(json_encode(['message' => 'Login não autorizado']));
+                return $response->withStatus(401);
             }
             if (!password_verify($requestData->password, $result->password)) {
-                return $this->handleResponse(401, ['message' => 'Login não autorizado']);
+                $response->getBody()->write(json_encode(['message' => 'Login não autorizado']));
+                return $response->withStatus(401);
             }
         } catch (\Throwable $error) {
-            return $this->handleResponse(500, $this->errorResponse($error));
+            $response->getBody()->write(json_encode($this->errorResponse($error)));
+            return $response->withStatus(500);
         }
 
         $data['token'] = TokenManager::generateTokenForData(['id' => $result->id, 'user_name' => $result->user_name]);

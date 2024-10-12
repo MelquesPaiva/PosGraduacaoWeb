@@ -20,7 +20,8 @@ class UserController
         $createdAt = date('Y-m-d H:i:s');
 
         if (!$userName || !$password) {
-            return $this->handleResponse(400, ['message' => 'Faltam preencher parametros obrigatórios']);
+            $response->getBody()->write(json_encode(['message' => 'Faltam preencher parametros obrigatórios']));
+            return $response->withStatus(400);
         }
 
         $sql = "INSERT INTO user (user_name, password, created_at) VALUES (:user_name, :password, :created_at)";
@@ -34,9 +35,11 @@ class UserController
 
             $stmt->execute();
 
-            return $this->handleResponse(201, ['message' => 'Usuario criado com sucesso']);
+            $response->getBody()->write(json_encode(['message' => 'Usuario criado com sucesso']));
+            return $response->withStatus(201);
         } catch (\Throwable $e) {
-            return $this->handleResponse(500, $this->errorResponse($e));
+            $response->getBody()->write(json_encode($this->errorResponse($e)));
+            return $response->withStatus(500);
         }
     }
 }
