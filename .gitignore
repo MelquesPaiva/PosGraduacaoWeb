@@ -6,3 +6,4 @@ vendor/
 *.backup
 *.lock.hcl
 *.env
+InfraestruturaParaWeb/terraform/terraform.tfstate
