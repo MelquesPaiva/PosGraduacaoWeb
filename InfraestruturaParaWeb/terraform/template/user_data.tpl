@@ -16,5 +16,7 @@ apt -y install \
     default-libmysqlclient-dev \
     nginx
 
+sudo chown -R ubuntu /var/www/html
+
 mkdir /home/ubuntu/myapp
 cd /home/ubuntu/myapp

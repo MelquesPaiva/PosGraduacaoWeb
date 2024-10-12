@@ -38,6 +38,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: "InfraestruturaParaWeb/app/*"
+          source: "InfraestruturaParaWeb/app/"
           target: "/home/ubuntu/myapp/"
           strip_components: 2
