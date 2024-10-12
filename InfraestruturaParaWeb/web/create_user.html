@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Create User</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container mt-5">
-    <h2>Login</h2>
+    <h2>Create New User</h2>
     <div id="alert-container"></div>
-    <form id="loginForm">
+    <form id="userForm">
         <div class="mb-3">
             <label for="user_name" class="form-label">User Name</label>
             <input type="text" class="form-control" id="user_name" name="user_name" required>
@@ -21,21 +21,18 @@
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary">Create User</button>
     </form>
-    <div class="mt-3">
-        <a href="create_user.html">Criar Usuário</a>
-    </div>
 </div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <!-- JavaScript to handle form submission -->
 <script>
-    const apiUrl = `http://${window.location.host}:5000/login`;
+    const apiUrl = `http://${window.location.host}:5000/user/create`;
 
-    document.getElementById('loginForm').addEventListener('submit', async function(event) {
-        event.preventDefault(); // Prevent default form submission
+    document.getElementById('userForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
 
         const userName = document.getElementById('user_name').value;
         const password = document.getElementById('password').value;
@@ -55,23 +52,27 @@
             const result = await response.json();
             const alertContainer = document.getElementById('alert-container');
 
-            if (response.status === 200) {
-                localStorage.setItem('token', result.token)
-                window.location.href = 'people.html';
+            if (response.status === 201 || response.status === 200) {
+                // Success message
+                alertContainer.innerHTML = `
+                        <div class="alert alert-success" role="alert">
+                            ${result.message}
+                        </div>
+                    `;
             } else {
-                // Display error message
+                // Error message
                 alertContainer.innerHTML = `
                         <div class="alert alert-danger" role="alert">
-                            ${result.error || 'Invalid credentials, please try again.'}
+                            ${result.error || 'An error occurred while creating the user.'}
                         </div>
                     `;
             }
 
         } catch (error) {
-            // Display network or other errors
+            // Network or other errors
             document.getElementById('alert-container').innerHTML = `
                     <div class="alert alert-danger" role="alert">
-                        Failed to login: ${error.message}
+                        Failed to create user: ${error.message}
                     </div>
                 `;
         }

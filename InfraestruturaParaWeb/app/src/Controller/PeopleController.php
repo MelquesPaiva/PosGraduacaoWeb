@@ -2,6 +2,7 @@
 
 namespace Infraweb\App\Controller;
 
+use Infraweb\App\Controller\Response\ResponseHelper;
 use Infraweb\App\DB\MysqlConnection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -9,6 +10,8 @@ use Slim\Psr7\Response;
 
 class PeopleController
 {
+    use ResponseHelper;
+
     public function get(): ResponseInterface
     {
         $statusCode = 200;
@@ -100,23 +103,5 @@ class PeopleController
         }
 
         return $this->handleResponse($statusCode, $data);
-    }
-
-    private function errorResponse(\Throwable $error): array
-    {
-        return [
-            'status' => 'error',
-            'message' => 'Ocorreu um error',
-            'trace_message' => $error->getMessage(),
-        ];
-    }
-
-    private function handleResponse(int $statusCode, \stdClass|array $data): ResponseInterface
-    {
-        $response = new Response();
-        $response->getBody()->write(json_encode($data));
-        $response->withStatus($statusCode);
-
-        return $response;
     }
 }

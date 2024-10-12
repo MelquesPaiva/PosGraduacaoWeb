@@ -1,10 +1,14 @@
 <?php
 
 use Dotenv\Dotenv;
+use Infraweb\App\Controller\LoginController;
 use Infraweb\App\Controller\PeopleController;
+use Infraweb\App\Controller\UserController;
+use Infraweb\App\Middleware\AuthenticateRequestMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use Slim\Routing\RouteCollectorProxy;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -38,17 +42,22 @@ $app->add(function (Request $request, \Psr\Http\Server\RequestHandlerInterface $
     return $response;
 });
 
-$app->get('/people', [PeopleController::class, 'get']);
-$app->get('/people/{id}', function (Request $request, Response $response, $args) {
-    $peopleController = new PeopleController();
-    return $peopleController->getById($args['id']);
-});
-$app->delete('/people/{id}', [PeopleController::class, 'delete']);
-$app->post('/people', [PeopleController::class, 'save']);
-$app->put('/people/{id}', [PeopleController::class, 'update']);
+$app->post('/login', [LoginController::class, 'login']);
+$app->post('/user/create', [UserController::class, 'create']);
+
+$app->group('/people', function (RouteCollectorProxy $group) {
+    $group->post('', [PeopleController::class, 'save']);
+    $group->get('', [PeopleController::class, 'get']);
+    $group->get('/{id:[0-9]+}', function (Request $request, Response $response, $args) {
+        $peopleController = new PeopleController();
+        return $peopleController->getById($args['id']);
+    });
+    $group->delete('/{id:[0-9]+}', [PeopleController::class, 'delete']);
+    $group->put('/{id:[0-9]+}', [PeopleController::class, 'update']);
+})->addMiddleware(new AuthenticateRequestMiddleware());
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) {
-    $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
+    $handler = $req->notFoundHandler; // handle using the default Slim page not found handler
     return $handler($req, $res);
 });
 
